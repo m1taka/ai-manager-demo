@@ -1,0 +1,30 @@
+{
+  "name": "ai-manager-backend",
+  "version": "1.0.0",
+  "description": "Backend API for AI Manager - Demo",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"AiManager demo - tests not implemented\""
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "api",
+    "aimanager"
+  ],
+  "author": "AiMAnager Demo",
+  "license": "MIT"
+}
