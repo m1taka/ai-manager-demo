@@ -181,11 +181,11 @@ const ProjectManagement = () => {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Budget:</span>
-                  <span className="font-medium">${project.budget.toLocaleString()}</span>
+                  <span className="font-medium text-gray-600">${project.budget.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Spent:</span>
-                  <span className="font-medium">${project.spent.toLocaleString()}</span>
+                  <span className="font-medium text-gray-600">${project.spent.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Manager:</span>
@@ -200,7 +200,7 @@ const ProjectManagement = () => {
               <div className="pt-3 border-t">
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-gray-500">Progress</span>
-                  <span className="font-medium">{progress}%</span>
+                  <span className="font-medium text-gray-600">{progress}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 

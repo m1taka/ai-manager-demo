@@ -125,9 +125,9 @@ const InventoryManagement = () => {
           </div>
         );
       case 'unitPrice':
-        return <span className="font-medium">${item.unitPrice.toFixed(2)}</span>;
+        return <span className="font-medium text-gray-600">${item.unitPrice.toFixed(2)}</span>;
       case 'totalValue':
-        return <span className="font-medium">${(item.quantity * item.unitPrice).toFixed(2)}</span>;
+        return <span className="font-medium text-gray-600">${(item.quantity * item.unitPrice).toFixed(2)}</span>;
       case 'status':
         return (
           <Badge variant={getStatusVariant(item.status)}>
@@ -241,19 +241,19 @@ const InventoryManagement = () => {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="text-gray-500">Quantity:</span>
-                <span className="ml-2 font-medium">{item.quantity}</span>
+                <span className="ml-2 font-medium text-gray-600">{item.quantity}</span>
               </div>
               <div>
                 <span className="text-gray-500">Min Level:</span>
-                <span className="ml-2 font-medium">{item.minStockLevel}</span>
+                <span className="ml-2 font-medium text-gray-600">{item.minStockLevel}</span>
               </div>
               <div>
                 <span className="text-gray-500">Unit Price:</span>
-                <span className="ml-2 font-medium">${item.unitPrice.toFixed(2)}</span>
+                <span className="ml-2 font-medium text-gray-600">${item.unitPrice.toFixed(2)}</span>
               </div>
               <div>
                 <span className="text-gray-500">Total Value:</span>
-                <span className="ml-2 font-medium">${(item.quantity * item.unitPrice).toFixed(2)}</span>
+                <span className="ml-2 font-medium text-gray-600">${(item.quantity * item.unitPrice).toFixed(2)}</span>
               </div>
             </div>
 

@@ -207,7 +207,7 @@ const FinanceManagement = () => {
 
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500">Date:</span>
-              <span className="font-medium">{new Date(record.date).toLocaleDateString()}</span>
+              <span className="font-medium text-gray-600">{new Date(record.date).toLocaleDateString()}</span>
             </div>
 
             <div className="flex justify-end space-x-2 pt-2 border-t">

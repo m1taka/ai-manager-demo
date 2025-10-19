@@ -122,7 +122,7 @@ const EmployeeManagement = () => {
           </Badge>
         );
       case 'salary':
-        return <span className="font-medium">${employee.salary?.toLocaleString()}</span>;
+        return <span className="font-medium text-gray-600">${employee.salary?.toLocaleString()}</span>;
       case 'actions':
         return (
           <div className="flex space-x-2">
@@ -199,19 +199,19 @@ const EmployeeManagement = () => {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <span className="text-gray-500">Position:</span>
-                <span className="ml-2 font-medium">{employee.position}</span>
+                <span className="ml-2 font-medium text-gray-600">{employee.position}</span>
               </div>
               <div>
                 <span className="text-gray-500">Department:</span>
-                <span className="ml-2 font-medium">{employee.department}</span>
+                <span className="ml-2 font-medium text-gray-600">{employee.department}</span>
               </div>
               <div>
                 <span className="text-gray-500">Salary:</span>
-                <span className="ml-2 font-medium">${employee.salary?.toLocaleString()}</span>
+                <span className="ml-2 font-medium text-gray-600">${employee.salary?.toLocaleString()}</span>
               </div>
               <div>
                 <span className="text-gray-500">Hire Date:</span>
-                <span className="ml-2 font-medium">
+                <span className="ml-2 font-medium text-gray-600">
                   {new Date(employee.hireDate).toLocaleDateString()}
                 </span>
               </div>
