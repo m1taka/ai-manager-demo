@@ -1,4 +1,4 @@
-# AI Manager - Portfolio Demo
+# AI Manager - Business Management System
 
 A comprehensive business management system built with Next.js frontend and Node.js backend, showcasing employee management, inventory tracking, project oversight, and financial monitoring capabilities.
 
@@ -189,9 +189,9 @@ The application uses predefined demo data located in `backend/src/config/demoDat
 - **Environment Variables** - Configurable settings
 - **Error Handling** - Comprehensive error handling and user feedback
 
-## 📝 Portfolio Notes
+## 📝 Project Notes
 
-This is a **portfolio demonstration project** showcasing:
+This is a **business management demonstration** showcasing:
 - Full-stack development capabilities
 - Modern React/Next.js frontend development
 - RESTful API design and implementation
@@ -203,7 +203,7 @@ This is a **portfolio demonstration project** showcasing:
 ### Demo Mode Features
 - No real database - uses in-memory demo data
 - All CRUD operations return success responses without persistence
-- Designed for demonstration and portfolio purposes
+- Designed for demonstration purposes
 - Shows complete application flow and user interactions
 
 ## 🚀 Future Enhancements
@@ -220,12 +220,12 @@ Potential improvements for a production version:
 
 ## 📄 License
 
-This project is created for portfolio demonstration purposes.
+This project is created for demonstration purposes.
 
 ## 👨‍💻 Developer
 
-Created as a portfolio project demonstrating full-stack development capabilities with modern web technologies.
+Created as a demonstration project showcasing full-stack development capabilities with modern web technologies.
 
 ---
 
-**Note**: This is a demo application designed for portfolio showcase. All data is simulated and no real business data is stored or processed.
+**Note**: This is a demo application designed for showcase. All data is simulated and no real business data is stored or processed.

@@ -1,13 +1,75 @@
 'use client';
 
+import { useState } from 'react';
 import { useInventory } from '../hooks/useApi';
-import { StatCard, Card, LoadingSpinner, ErrorState, Badge, Button } from './ui';
+import { StatCard, Card, LoadingSpinner, ErrorState, Badge, Button, ConfirmDialog } from './ui';
 import { PageHeader, StatsGrid, DataTable } from './layout';
 import { InventoryItem } from '../types';
+import { inventoryAPI } from '../../services/api';
+import { useMutation } from '../../hooks/useAPI';
 import PageChatSection from '@/components/PageChatSection';
+import InventoryForm from './forms/InventoryForm';
 
 const InventoryManagement = () => {
   const { data: inventory, loading, error, refetch } = useInventory();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<InventoryItem | undefined>(undefined);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; item?: InventoryItem }>({ isOpen: false });
+
+  // Mutations for CRUD operations
+  const createMutation = useMutation(inventoryAPI.create, {
+    onSuccess: () => {
+      setIsFormOpen(false);
+      setEditingItem(undefined);
+      refetch();
+    }
+  });
+
+  const updateMutation = useMutation(
+    ({ id, data }: { id: string; data: any }) => inventoryAPI.update(id, data),
+    {
+      onSuccess: () => {
+        setIsFormOpen(false);
+        setEditingItem(undefined);
+        refetch();
+      }
+    }
+  );
+
+  const deleteMutation = useMutation(inventoryAPI.delete, {
+    onSuccess: () => {
+      setDeleteConfirm({ isOpen: false });
+      refetch();
+    }
+  });
+
+  const handleAddItem = () => {
+    setEditingItem(undefined);
+    setIsFormOpen(true);
+  };
+
+  const handleEditItem = (item: InventoryItem) => {
+    setEditingItem(item);
+    setIsFormOpen(true);
+  };
+
+  const handleDeleteItem = (item: InventoryItem) => {
+    setDeleteConfirm({ isOpen: true, item });
+  };
+
+  const handleFormSubmit = (formData: Partial<InventoryItem>) => {
+    if (editingItem) {
+      updateMutation.mutate({ id: editingItem._id, data: formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirm.item) {
+      deleteMutation.mutate(deleteConfirm.item._id);
+    }
+  };
 
   if (loading) {
     return (
@@ -75,8 +137,12 @@ const InventoryManagement = () => {
       case 'actions':
         return (
           <div className="flex space-x-2">
-            <Button variant="ghost" size="sm">Edit</Button>
-            <Button variant="ghost" size="sm">Delete</Button>
+            <Button variant="ghost" size="sm" onClick={() => handleEditItem(item)}>
+              Edit
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => handleDeleteItem(item)}>
+              Delete
+            </Button>
           </div>
         );
       default:
@@ -89,7 +155,7 @@ const InventoryManagement = () => {
       <PageHeader 
         title="Inventory Management" 
         description="Track and manage your inventory levels"
-        action={<Button>+ Add Item</Button>}
+        action={<Button onClick={handleAddItem}>+ Add Item</Button>}
       />
 
       {/* AI Assistant */}
@@ -192,8 +258,12 @@ const InventoryManagement = () => {
             </div>
 
             <div className="flex justify-end space-x-2 pt-2 border-t">
-              <Button variant="ghost" size="sm">Edit</Button>
-              <Button variant="ghost" size="sm">Reorder</Button>
+              <Button variant="ghost" size="sm" onClick={() => handleEditItem(item)}>
+                Edit
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => handleDeleteItem(item)}>
+                Delete
+              </Button>
             </div>
           </Card>
         ))}
@@ -207,6 +277,30 @@ const InventoryManagement = () => {
           renderCell={renderCell}
         />
       </div>
+
+      {/* Inventory Form Modal */}
+      <InventoryForm
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingItem(undefined);
+        }}
+        onSubmit={handleFormSubmit}
+        item={editingItem}
+        loading={createMutation.loading || updateMutation.loading}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false })}
+        onConfirm={handleConfirmDelete}
+        title="Delete Inventory Item"
+        message={`Are you sure you want to delete ${deleteConfirm.item?.name}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

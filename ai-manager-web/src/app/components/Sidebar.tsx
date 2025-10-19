@@ -12,7 +12,8 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
     { id: 'inventory', label: 'Inventory', icon: '📦' },
     { id: 'projects', label: 'Projects', icon: '🚀' },
     { id: 'finance', label: 'Finance', icon: '💰' },
-    { id: 'chat', label: 'AI Assistant', icon: '🤖' },
+    { id: 'ai-assistant', label: 'AI Assistant', icon: '🤖' },
+    { id: 'chat', label: 'Chat', icon: '💬' },
   ];
 
   return (
@@ -20,7 +21,7 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
       {/* Logo/Brand */}
       <div className="flex-shrink-0 p-6 border-b border-gray-200">
         <h1 className="text-xl font-bold text-gray-900">AI Manager</h1>
-        <p className="text-sm text-gray-500 mt-1">Portfolio Demo</p>
+        <p className="text-sm text-gray-500 mt-1">Business System</p>
       </div>
       
       {/* Navigation */}
@@ -49,7 +50,7 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
           </div>
           <div className="ml-3 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">Demo User</p>
-            <p className="text-xs text-gray-500 truncate">Portfolio Mode</p>
+            <p className="text-xs text-gray-500 truncate">Demo Mode</p>
           </div>
         </div>
       </div>

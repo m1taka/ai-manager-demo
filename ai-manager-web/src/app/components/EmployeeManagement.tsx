@@ -1,13 +1,75 @@
 'use client';
 
+import { useState } from 'react';
 import { useEmployees } from '../hooks/useApi';
-import { StatCard, Card, LoadingSpinner, ErrorState, Badge, Button } from './ui';
+import { StatCard, Card, LoadingSpinner, ErrorState, Badge, Button, Modal, ConfirmDialog } from './ui';
 import { PageHeader, StatsGrid, DataTable } from './layout';
 import { Employee } from '../types';
+import { employeeAPI } from '../../services/api';
+import { useMutation } from '../../hooks/useAPI';
 import PageChatSection from '@/components/PageChatSection';
+import EmployeeForm from './forms/EmployeeForm';
 
 const EmployeeManagement = () => {
   const { data: employees, loading, error, refetch } = useEmployees();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>(undefined);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; employee?: Employee }>({ isOpen: false });
+
+  // Mutations for CRUD operations
+  const createMutation = useMutation(employeeAPI.create, {
+    onSuccess: () => {
+      setIsFormOpen(false);
+      setEditingEmployee(undefined);
+      refetch();
+    }
+  });
+
+  const updateMutation = useMutation(
+    ({ id, data }: { id: string; data: any }) => employeeAPI.update(id, data),
+    {
+      onSuccess: () => {
+        setIsFormOpen(false);
+        setEditingEmployee(undefined);
+        refetch();
+      }
+    }
+  );
+
+  const deleteMutation = useMutation(employeeAPI.delete, {
+    onSuccess: () => {
+      setDeleteConfirm({ isOpen: false });
+      refetch();
+    }
+  });
+
+  const handleAddEmployee = () => {
+    setEditingEmployee(undefined);
+    setIsFormOpen(true);
+  };
+
+  const handleEditEmployee = (employee: Employee) => {
+    setEditingEmployee(employee);
+    setIsFormOpen(true);
+  };
+
+  const handleDeleteEmployee = (employee: Employee) => {
+    setDeleteConfirm({ isOpen: true, employee });
+  };
+
+  const handleFormSubmit = (formData: Partial<Employee>) => {
+    if (editingEmployee) {
+      updateMutation.mutate({ id: editingEmployee._id, data: formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirm.employee) {
+      deleteMutation.mutate(deleteConfirm.employee._id);
+    }
+  };
 
   if (loading) {
     return (
@@ -64,8 +126,12 @@ const EmployeeManagement = () => {
       case 'actions':
         return (
           <div className="flex space-x-2">
-            <Button variant="ghost" size="sm">Edit</Button>
-            <Button variant="ghost" size="sm">Delete</Button>
+            <Button variant="ghost" size="sm" onClick={() => handleEditEmployee(employee)}>
+              Edit
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => handleDeleteEmployee(employee)}>
+              Delete
+            </Button>
           </div>
         );
       default:
@@ -78,7 +144,7 @@ const EmployeeManagement = () => {
       <PageHeader 
         title="Employee Management" 
         description="Manage your team members and their information"
-        action={<Button>+ Add Employee</Button>}
+        action={<Button onClick={handleAddEmployee}>+ Add Employee</Button>}
       />
 
       {/* AI Assistant */}
@@ -152,8 +218,12 @@ const EmployeeManagement = () => {
             </div>
 
             <div className="flex justify-end space-x-2 pt-2 border-t">
-              <Button variant="ghost" size="sm">Edit</Button>
-              <Button variant="ghost" size="sm">View Profile</Button>
+              <Button variant="ghost" size="sm" onClick={() => handleEditEmployee(employee)}>
+                Edit
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => handleDeleteEmployee(employee)}>
+                Delete
+              </Button>
             </div>
           </Card>
         ))}
@@ -167,6 +237,30 @@ const EmployeeManagement = () => {
           renderCell={renderCell}
         />
       </div>
+
+      {/* Employee Form Modal */}
+      <EmployeeForm
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingEmployee(undefined);
+        }}
+        onSubmit={handleFormSubmit}
+        employee={editingEmployee}
+        loading={createMutation.loading || updateMutation.loading}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false })}
+        onConfirm={handleConfirmDelete}
+        title="Delete Employee"
+        message={`Are you sure you want to delete ${deleteConfirm.employee?.name}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

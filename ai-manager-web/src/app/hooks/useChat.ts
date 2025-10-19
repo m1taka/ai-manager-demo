@@ -127,7 +127,7 @@ async function simulateAIResponse(userMessage: string): Promise<string> {
   }
 
   if (message.includes('project') || message.includes('budget') || message.includes('timeline')) {
-    return "Your project portfolio shows a healthy mix of completed and active projects. The Website Redesign project is progressing well with good budget utilization. I can help you optimize project timelines, analyze budget efficiency, or suggest resource allocation improvements. What specific aspect would you like to focus on?";
+    return "Your project dashboard shows a healthy mix of completed and active projects. The Website Redesign project is progressing well with good budget utilization. I can help you optimize project timelines, analyze budget efficiency, or suggest resource allocation improvements. What specific aspect would you like to focus on?";
   }
 
   if (message.includes('finance') || message.includes('revenue') || message.includes('profit') || message.includes('money')) {

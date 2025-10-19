@@ -1,13 +1,75 @@
 'use client';
 
+import { useState } from 'react';
 import { useProjects } from '../hooks/useApi';
-import { StatCard, Card, LoadingSpinner, ErrorState, Badge, Button } from './ui';
+import { StatCard, Card, LoadingSpinner, ErrorState, Badge, Button, ConfirmDialog } from './ui';
 import { PageHeader, StatsGrid } from './layout';
 import { Project } from '../types';
+import { projectsAPI } from '../../services/api';
+import { useMutation } from '../../hooks/useAPI';
 import PageChatSection from '@/components/PageChatSection';
+import ProjectForm from './forms/ProjectForm';
 
 const ProjectManagement = () => {
   const { data: projects, loading, error, refetch } = useProjects();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | undefined>(undefined);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; project?: Project }>({ isOpen: false });
+
+  // Mutations for CRUD operations
+  const createMutation = useMutation(projectsAPI.create, {
+    onSuccess: () => {
+      setIsFormOpen(false);
+      setEditingProject(undefined);
+      refetch();
+    }
+  });
+
+  const updateMutation = useMutation(
+    ({ id, data }: { id: string; data: any }) => projectsAPI.update(id, data),
+    {
+      onSuccess: () => {
+        setIsFormOpen(false);
+        setEditingProject(undefined);
+        refetch();
+      }
+    }
+  );
+
+  const deleteMutation = useMutation(projectsAPI.delete, {
+    onSuccess: () => {
+      setDeleteConfirm({ isOpen: false });
+      refetch();
+    }
+  });
+
+  const handleAddProject = () => {
+    setEditingProject(undefined);
+    setIsFormOpen(true);
+  };
+
+  const handleEditProject = (project: Project) => {
+    setEditingProject(project);
+    setIsFormOpen(true);
+  };
+
+  const handleDeleteProject = (project: Project) => {
+    setDeleteConfirm({ isOpen: true, project });
+  };
+
+  const handleFormSubmit = (formData: Partial<Project>) => {
+    if (editingProject) {
+      updateMutation.mutate({ id: editingProject._id, data: formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteConfirm.project) {
+      deleteMutation.mutate(deleteConfirm.project._id);
+    }
+  };
 
   if (loading) {
     return (
@@ -57,7 +119,7 @@ const ProjectManagement = () => {
       <PageHeader 
         title="Project Management" 
         description="Oversee project progress and timelines"
-        action={<Button>+ New Project</Button>}
+        action={<Button onClick={handleAddProject}>+ New Project</Button>}
       />
 
       {/* AI Assistant */}
@@ -149,13 +211,41 @@ const ProjectManagement = () => {
               </div>
 
               <div className="flex justify-end space-x-2 pt-3 border-t">
-                <Button variant="ghost" size="sm">Edit</Button>
-                <Button variant="ghost" size="sm">View Details</Button>
+                <Button variant="ghost" size="sm" onClick={() => handleEditProject(project)}>
+                  Edit
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => handleDeleteProject(project)}>
+                  Delete
+                </Button>
               </div>
             </Card>
           );
         })}
       </div>
+
+      {/* Project Form Modal */}
+      <ProjectForm
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingProject(undefined);
+        }}
+        onSubmit={handleFormSubmit}
+        project={editingProject}
+        loading={createMutation.loading || updateMutation.loading}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false })}
+        onConfirm={handleConfirmDelete}
+        title="Delete Project"
+        message={`Are you sure you want to delete "${deleteConfirm.project?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 - [x] Verify that the copilot-instructions.md file in the .github directory is created. ✅ **COMPLETED**: Created .github/copilot-instructions.md file
 
-- [x] Clarify Project Requirements ✅ **COMPLETED**: Portfolio version of AI Manager with Next.js frontend, Node.js backend, demo data, and simplified functionality
+- [x] Clarify Project Requirements ✅ **COMPLETED**: AI Manager with Next.js frontend, Node.js backend, demo data, and comprehensive business management functionality
 
 - [ ] Scaffold the Project
 	<!--

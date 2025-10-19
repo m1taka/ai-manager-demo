@@ -40,28 +40,33 @@ router.get('/:id', (req, res) => {
   }
 });
 
-// POST /api/employees - Add new employee (demo - just returns success)
+// POST /api/employees - Add new employee
 router.post('/', (req, res) => {
   try {
-    const { name, email, position, department, salary } = req.body;
+    const { name, email, position, department, salary, phone, address } = req.body;
     
-    // In a real app, this would save to database
+    // Create new employee with generated ID
     const newEmployee = {
-      _id: `demo${Date.now()}`,
+      _id: `emp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       name,
       email,
       position,
       department,
-      salary: parseFloat(salary),
-      hireDate: new Date(),
+      salary: parseFloat(salary) || 0,
+      phone: phone || '',
+      address: address || '',
+      hireDate: new Date().toISOString(),
       status: 'Active',
       avatar: '/avatars/default.jpg',
       attendance: []
     };
 
+    // Add to demo data array
+    demoData.employees.push(newEmployee);
+
     res.status(201).json({
       success: true,
-      message: 'Employee added successfully (demo mode)',
+      message: 'Employee added successfully',
       data: newEmployee
     });
   } catch (error) {
@@ -72,21 +77,31 @@ router.post('/', (req, res) => {
   }
 });
 
-// PUT /api/employees/:id - Update employee (demo - just returns success)
+// PUT /api/employees/:id - Update employee
 router.put('/:id', (req, res) => {
   try {
-    const employee = demoData.employees.find(emp => emp._id === req.params.id);
-    if (!employee) {
+    const employeeIndex = demoData.employees.findIndex(emp => emp._id === req.params.id);
+    if (employeeIndex === -1) {
       return res.status(404).json({ 
         success: false, 
         error: 'Employee not found' 
       });
     }
 
+    // Update employee data
+    const updatedEmployee = {
+      ...demoData.employees[employeeIndex],
+      ...req.body,
+      salary: req.body.salary ? parseFloat(req.body.salary) : demoData.employees[employeeIndex].salary
+    };
+
+    // Replace in array
+    demoData.employees[employeeIndex] = updatedEmployee;
+
     res.json({
       success: true,
-      message: 'Employee updated successfully (demo mode)',
-      data: { ...employee, ...req.body }
+      message: 'Employee updated successfully',
+      data: updatedEmployee
     });
   } catch (error) {
     res.status(500).json({ 
@@ -96,20 +111,24 @@ router.put('/:id', (req, res) => {
   }
 });
 
-// DELETE /api/employees/:id - Delete employee (demo - just returns success)
+// DELETE /api/employees/:id - Delete employee
 router.delete('/:id', (req, res) => {
   try {
-    const employee = demoData.employees.find(emp => emp._id === req.params.id);
-    if (!employee) {
+    const employeeIndex = demoData.employees.findIndex(emp => emp._id === req.params.id);
+    if (employeeIndex === -1) {
       return res.status(404).json({ 
         success: false, 
         error: 'Employee not found' 
       });
     }
 
+    // Remove from array
+    const deletedEmployee = demoData.employees.splice(employeeIndex, 1)[0];
+
     res.json({
       success: true,
-      message: 'Employee deleted successfully (demo mode)'
+      message: 'Employee deleted successfully',
+      data: deletedEmployee
     });
   } catch (error) {
     res.status(500).json({ 

@@ -9,6 +9,7 @@ import InventoryManagement from './InventoryManagement';
 import ProjectManagement from './ProjectManagement';
 import FinanceManagement from './FinanceManagement';
 import ChatPage from './pages/ChatPage';
+import AIAssistantPage from './pages/AIAssistantPage';
 import { MobileLayout } from './layout';
 
 const Dashboard = () => {
@@ -26,6 +27,8 @@ const Dashboard = () => {
         return <ProjectManagement />;
       case 'finance':
         return <FinanceManagement />;
+      case 'ai-assistant':
+        return <AIAssistantPage />;
       case 'chat':
         return <ChatPage />;
       default:

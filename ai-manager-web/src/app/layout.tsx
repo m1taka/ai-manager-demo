@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import FloatingChatButton from "@/app/components/ui/FloatingChatButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Manager - Portfolio Demo",
+  title: "AI Manager - Business Management System",
   description: "Business management system with employee, inventory, project, and finance management",
 };
 
@@ -29,7 +28,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <FloatingChatButton />
       </body>
     </html>
   );

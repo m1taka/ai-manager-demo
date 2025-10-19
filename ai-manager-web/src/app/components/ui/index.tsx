@@ -195,3 +195,6 @@ export function ErrorState({ message, onRetry }: ErrorStateProps) {
     </Card>
   );
 }
+
+// Export modal components
+export { Modal, FormField, ConfirmDialog } from './Modal';
