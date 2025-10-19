@@ -127,7 +127,6 @@ const PageChatSection: React.FC<PageChatSectionProps> = ({
               <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{title}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {!speechEnabled 
                   ? 'Speech disabled - text only' 

@@ -13,7 +13,7 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
     { id: 'projects', label: 'Projects', icon: '🚀' },
     { id: 'finance', label: 'Finance', icon: '💰' },
     { id: 'ai-assistant', label: 'AI Assistant', icon: '🤖' },
-    { id: 'chat', label: 'Chat', icon: '💬' },
+    // { id: 'chat', label: 'Chat', icon: '💬' },
   ];
 
   return (
